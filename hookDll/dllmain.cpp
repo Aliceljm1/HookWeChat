@@ -7,6 +7,10 @@ HMODULE GetWechatWin()
 	return GetModuleHandle(L"WeChatWin.dll");
 }
 
+// 发送消息的地址
+DWORD dwSendCallAddr = (DWORD)GetWechatWin() + (0x6658d2e0 - 0x65fc0000);
+
+
 struct wxMsg
 {
 	wchar_t* pStr;
@@ -36,18 +40,22 @@ void test()
 	// 偏移量
 	DWORD WXIDOFFSET = 0x25357A0;
 	DWORD PHONEOFFSET = 0x25357B8;
+	DWORD USERNAMEOFFSET = 0x2535848;
 
 	DWORD pwxid = (DWORD)hModule + WXIDOFFSET;
 	DWORD pphone = (DWORD)hModule + PHONEOFFSET;
+	DWORD pusername = (DWORD)hModule + USERNAMEOFFSET;
 
 	// 窄转宽
 	CA2W id((char*)pwxid);
 	wchar_t* wxid = (wchar_t*)id;
 	CA2W ph((char*)pphone);
 	wchar_t* phone = (wchar_t*)ph;
+	CA2W pu((char*)pusername);
+	wchar_t* username = (wchar_t*)pu;
 
 	CString s;
-	s.Format(_T("hook addr=%x,\nwxid=%s,\nphone num=%s"), hModule, wxid, phone);
+	s.Format(_T("hook addr=0x%x\nwxid=%s\nphone num=%s\nusername=%s"), hModule, wxid, phone, username);
 
 	MessageBox(NULL, s.GetBuffer(), L"Hook WeChatWin.dll", MB_OK);
 }
@@ -92,7 +100,7 @@ void SendWechatMessage(wchar_t* wxid, wchar_t* msg)
 		lea ecx, buff;
 	}
 
-	DWORD dwSendCallAddr = (DWORD)GetWechatWin() + (0x6658d2e0 - 0x65fc0000);
+	
 	__asm {
 		push 1;
 		mov eax, 0;
@@ -108,9 +116,6 @@ void SendWechatMessage(wchar_t* wxid, wchar_t* msg)
 
 void SendWechatMessage(wchar_t* wxid, wchar_t* msg, wchar_t* atsb)
 {
-	//拿到发送消息的call的地址
-	DWORD dwSendCallAddr = (DWORD)GetWechatWin() + (0x6658d2e0 - 0x65fc0000);
-
 	//微信ID/群ID
 	wxMsg id = { 0 };
 	id.pStr = wxid;
