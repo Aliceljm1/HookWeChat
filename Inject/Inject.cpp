@@ -5,7 +5,6 @@
 
 LPCTSTR exeName = _T("WeChat.exe");
 LPCTSTR dllName = _T("hookDll.dll");
-const char * DLLPath = "C:\\Users\\62453\\Documents\\projects\\hookDll\\Release\\hookDll.dll";
 
 // 获取PID
 UINT GetProcessIdByName(LPCTSTR pszExeFile)
@@ -109,6 +108,7 @@ bool UnInjectDll(const TCHAR* ptszDllFile, DWORD dwProcessId)
 	::CloseHandle(hModuleSnap);
 	if (false == isFound)
 	{
+		std::cout << "找不到DLL" << std::endl;
 		return false;
 	}
 	// 获取目标进程句柄   
@@ -140,6 +140,22 @@ bool UnInjectDll(const TCHAR* ptszDllFile, DWORD dwProcessId)
 	return true;
 }
 
+char* strToChar(CString str)
+{
+	char* ptr;
+#ifdef _UNICODE
+	LONG len;
+	len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
+	ptr = new char[len + 1];
+	memset(ptr, 0, len + 1);
+	WideCharToMultiByte(CP_ACP, 0, str, -1, ptr, len + 1, NULL, NULL);
+#else
+	ptr = new char[str.GetAllocLength() + 1];
+	sprintf(ptr, _T("%s"), str);
+#endif
+	return ptr;
+}
+
 // 注入DLL
 bool InjectDll(DWORD pid)
 {
@@ -149,7 +165,16 @@ bool InjectDll(DWORD pid)
 		std::cout << "can not get handle" << std::endl;
 		return 1;
 	}
+	CString str;
+	GetModuleFileName(NULL, str.GetBufferSetLength(MAX_PATH + 1), MAX_PATH + 1);
+	int last = str.ReverseFind('\\');
+	str = str.Left(last); //DLLPath为exe文件的绝对路径
+	str.Format(L"%s%s", str, L"\\hookDll.dll");
+
+	// DLL的路径，和exe在同一目录下
+	const char* DLLPath = strToChar(str);
 	SIZE_T PathSize = (strlen(DLLPath) + 1) * sizeof(TCHAR);
+
 	LPVOID StartAddress = VirtualAllocEx(hprocess, NULL, PathSize, MEM_COMMIT, PAGE_READWRITE);
 	if (!StartAddress)
 	{
@@ -181,22 +206,15 @@ bool InjectDll(DWORD pid)
 
 int main(int argc, char* argv[])
 {
-	// 是否注入dll
-	bool isHook = true;
-	if (argc == 2 && strcmp(argv[1], "unhook") == 0)
-		isHook = false;
-
 	// 提高访问权限
 	enableDebugPriv();
 	// 获取微信的进程ID
 	DWORD pid = GetProcessIdByName(exeName);
+	// 注入
+	InjectDll(pid);
+	Sleep(100);
 	// 卸载DLL
 	UnInjectDll(dllName, pid);
-	if (isHook)
-	{
-		// 注入
-		InjectDll(pid);
-	}
 
 	return 0;
 }

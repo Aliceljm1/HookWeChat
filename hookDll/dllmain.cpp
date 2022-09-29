@@ -31,16 +31,23 @@ struct wxAt {
 void test()
 {
 	HMODULE hModule = GetWechatWin();
+
+	// 偏移量
 	DWORD WXIDOFFSET = 0x25357A0;
 	DWORD PHONEOFFSET = 0x2535B70;
+
 	DWORD pwxid = (DWORD)hModule + WXIDOFFSET;
 	DWORD pphone = (DWORD)hModule + PHONEOFFSET;
 
-	 char* wxid = (char*)pwxid;
-	 char* phone = (char*)pphone;
+	// 窄转宽
+	CA2W id((char*)pwxid);
+	wchar_t* wxid = (wchar_t*)id;
+	CA2W ph((char*)pphone);
+	wchar_t* phone = (wchar_t*)ph;
 
 	CString s;
-	s.Format(_T("hook addr=%x,wxid=%d,phone num=%d"), hModule, wxid, phone);
+	s.Format(_T("hook addr=%x,\nwxid=%s,\nphone num=%s"), hModule, wxid, phone);
+
 	MessageBox(NULL, s.GetBuffer(), L"Hook WeChatWin.dll", MB_OK);
 }
 
