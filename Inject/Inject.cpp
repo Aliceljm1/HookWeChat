@@ -216,5 +216,7 @@ int main(int argc, char* argv[])
 	// 卸载DLL
 	UnInjectDll(dllName, pid);
 
+	system("pause");
+
 	return 0;
 }

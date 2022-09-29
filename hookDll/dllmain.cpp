@@ -21,7 +21,8 @@ struct wxId
 	int strLen2;
 	char buff[0x8];
 };
-struct wxAt {
+struct wxAt 
+{
 	wxId* atid;
 	DWORD p1;
 	DWORD p2;
@@ -34,7 +35,7 @@ void test()
 
 	// 偏移量
 	DWORD WXIDOFFSET = 0x25357A0;
-	DWORD PHONEOFFSET = 0x2535B70;
+	DWORD PHONEOFFSET = 0x25357B8;
 
 	DWORD pwxid = (DWORD)hModule + WXIDOFFSET;
 	DWORD pphone = (DWORD)hModule + PHONEOFFSET;
