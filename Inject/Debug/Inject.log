@@ -1,3 +1,0 @@
-﻿  Inject.cpp
-C:\Users\62453\Documents\projects\HookWeChat\Inject\Inject.cpp(205): warning C4715: “InjectDll”: 不是所有的控件路径都返回值
-  Inject.vcxproj -> C:\Users\62453\Documents\projects\HookWeChat\Debug\Inject.exe
