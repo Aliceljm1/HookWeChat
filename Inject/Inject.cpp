@@ -198,8 +198,8 @@ bool InjectDll(DWORD pid)
 		std::cout << "创建线程失败" << std::endl;
 		return 1;
 	}
-	//WaitForSingleObject(hThread, INFINITE);//等待DLL结束
 	std::cout << "注入成功" << std::endl;
+	WaitForSingleObject(hThread, INFINITE);//等待DLL结束
 	CloseHandle(hThread);
 	CloseHandle(hprocess);
 }
@@ -212,7 +212,6 @@ int main(int argc, char* argv[])
 	DWORD pid = GetProcessIdByName(exeName);
 	// 注入
 	InjectDll(pid);
-	Sleep(100);
 	// 卸载DLL
 	UnInjectDll(dllName, pid);
 
