@@ -179,10 +179,12 @@ bool InjectDll(DWORD pid)
 	CloseHandle(hprocess);
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 	// 是否注入dll
-	bool in = true;
+	bool isHook = true;
+	if (argc == 2 && strcmp(argv[1], "unhook") == 0)
+		isHook = false;
 
 	// 提高访问权限
 	enableDebugPriv();
@@ -190,7 +192,7 @@ int main()
 	DWORD pid = GetProcessIdByName(exeName);
 	// 卸载DLL
 	UnInjectDll(dllName, pid);
-	if (in)
+	if (isHook)
 	{
 		// 注入
 		InjectDll(pid);

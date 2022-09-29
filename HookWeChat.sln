@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hookDll", "hookDll\hookDll.vcxproj", "{339F8735-2661-458A-B78F-E4D9E8312E97}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Inject", "Inject\Inject.vcxproj", "{832FD3E6-9424-44A1-BEFE-02BB55D228DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{339F8735-2661-458A-B78F-E4D9E8312E97} = {339F8735-2661-458A-B78F-E4D9E8312E97}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -36,12 +36,12 @@ void test()
 	DWORD pwxid = (DWORD)hModule + WXIDOFFSET;
 	DWORD pphone = (DWORD)hModule + PHONEOFFSET;
 
-	// char* wxid = (char*)pwxid;
-	// char* phone = (char*)pphone;
+	 char* wxid = (char*)pwxid;
+	 char* phone = (char*)pphone;
 
 	CString s;
-	s.Format(_T("%x"), hModule);
-	MessageBox(NULL, s.GetBuffer(), L"WeChatWin.dll", MB_OK);
+	s.Format(_T("hook addr=%x,wxid=%d,phone num=%d"), hModule, wxid, phone);
+	MessageBox(NULL, s.GetBuffer(), L"Hook WeChatWin.dll", MB_OK);
 }
 
 void SendWechatMessage(wchar_t* wxid, wchar_t* msg)
