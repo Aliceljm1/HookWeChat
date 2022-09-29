@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 	DWORD pid = GetProcessIdByName(exeName);
 	// 注入
 	InjectDll(pid);
-	Sleep(100);
+	Sleep(500);
 	// 卸载DLL
 	UnInjectDll(dllName, pid);
 
