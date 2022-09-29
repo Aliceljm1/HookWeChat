@@ -154,7 +154,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		// MessageBox(0, L"成功潜入微信内部！", L"报告主人", NULL);
 		test();
 		SendWechatMessage((wchar_t*)L"wxid_q2mirynz7h6622", (wchar_t*)L"DLL成功注入，并向你发送了一条消息。");
-		// SendWechatMessage((wchar_t*)L"22526049857@chatroom", (wchar_t*)L"@王子豪 DLL成功注入，并向你发送了一条消息。", (wchar_t*)L"wxid_ivxugfki4phi22");
+		// SendWechatMessage((wchar_t*)L"22526049857@chatroom", (wchar_t*)L"@name DLL成功注入，并向你发送了一条消息。", (wchar_t*)L"wxid_ivxugfki4phi22");
 	case DLL_THREAD_ATTACH:
 
 	case DLL_THREAD_DETACH:
